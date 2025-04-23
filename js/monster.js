@@ -60,30 +60,30 @@ class Player extends Monster{
 
 class Bird extends Monster{
     constructor(tile){
-        super(tile, 6, 3);
+        super(tile, 7, 3);
     }
 }
 
 class Snake extends Monster{
     constructor(tile){
-        super(tile, 7, 1);
+        super(tile, 8, 1);
     }
 }
 
 class Tank extends Monster{
     constructor(tile){
-        super(tile, 8, 2);
+        super(tile, 9, 2);
     }
 }
 
 class Eater extends Monster{
     constructor(tile){
-        super(tile, 9, 1);
+        super(tile, 10, 1);
     }
 }
 
 class Jester extends Monster{
     constructor(tile){
-        super(tile, 10, 2);
+        super(tile, 11, 2);
     }
 }

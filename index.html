@@ -2,16 +2,16 @@
 <title>BITTERSWEET BROUGHLIKE</title>
 
 <style>
-    canvas{
-        outline: 2px solid #F8EDD7;
-        background-color: #BEBAE3;
-    }
+  canvas {
+    outline: 2px solid #f8edd7;
+    background-color: #bebae3;
+  }
 
-    body{
-        background-color: lightslategray;
-        text-align: center;
-        margin-top: 50px;
-    }
+  body {
+    background-color: rgb(117, 145, 193);
+    text-align: center;
+    margin-top: 50px;
+  }
 </style>
 
 <canvas></canvas>
@@ -22,27 +22,35 @@
 <script src="js/util.js"></script>
 <script src="js/spell.js"></script>
 <script>
-    tileSize = 64;
-    numTiles = 10;
-    uiWidth = 2;
-    level = 1;
-    maxHp = 6; 
+  tileSize = 64;
+  numTiles = 10;
+  uiWidth = 2;
+  level = 1;
+  maxHp = 6;
 
-    spritesheet = new Image();
-    spritesheet.src = 'spritesheet.png';
+  spritesheet = new Image();
+  spritesheet.src = "spritesheet.png";
+  spritesheet.onload = showTitle;
 
-    document.querySelector("html").onkeypress = function(e){
-        if (e.key=="w") player.tryMove(0, -1);
-        if (e.key=="s") player.tryMove(0, 1);
-        if (e.key=="a") player.tryMove(-1, 0);
-        if (e.key=="d") player.tryMove(1, 0);
-    };
+  gameState = "loading";
+  startingHp = 3;
+  numLevels = 6;
 
-    setInterval(draw, 15);
+  document.querySelector("html").onkeypress = function (e) {
+    if (gameState == "title") {
+      startGame();
+    } else if (gameState == "dead") {
+      showTitle();
+    } else if (gameState == "running") {
+      if (e.key == "w") player.tryMove(0, -1);
+      if (e.key == "s") player.tryMove(0, 1);
+      if (e.key == "a") player.tryMove(-1, 0);
+      if (e.key == "d") player.tryMove(1, 0);
+    }
+  };
 
-	setupCanvas();
-	
-	generateLevel();
+  setInterval(draw, 15);
 
-    player = new Player(randomPassableTile());
+  setupCanvas();
+
 </script>

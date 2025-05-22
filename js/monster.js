@@ -95,6 +95,7 @@ class Player extends Monster{
         super(tile, 0, 3);
         this.isPlayer = true;
         this.teleportCounter = 0;
+        this.outfit = 0; // y offset: 0, 16, 32, or 48
     }
 
     tryMove(dx, dy){
@@ -102,11 +103,26 @@ class Player extends Monster{
             tick();
         }
     }
+
+    setOutfit(offset) {
+        // offset should be 0, 16, 32, or 48
+        this.outfit = offset;
+    }
+
+    draw() {
+        if(this.teleportCounter > 0){
+            drawSprite(13, this.tile.x, this.tile.y);
+        }else{
+            // Use outfit as y offset for drawSprite
+            drawSprite(0, this.tile.x, this.tile.y, this.outfit);
+            this.drawHp();
+        }
+    }
 }
 
 class Bird extends Monster{
     constructor(tile){
-        super(tile, 7, 2);
+        super(tile, 7, 3);
     }
 }
 

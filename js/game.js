@@ -9,11 +9,11 @@ function setupCanvas(){
     ctx.imageSmoothingEnabled = false;
 }
 
-function drawSprite(sprite, x, y){
+function drawSprite(sprite, x, y, row = 0){
     ctx.drawImage(
         spritesheet,
         sprite*16,
-        0,
+        row,
         16,
         16,
         x*tileSize,

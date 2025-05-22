@@ -12,7 +12,49 @@
     text-align: center;
     margin-top: 50px;
   }
+
+  .menu-wrapper {
+    text-align: center;
+    margin-bottom:10px;
+  }
+
+  .toggle-outfits {
+    margin-bottom: 12px;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #888;
+    background: #f8edd7;
+    cursor: pointer;
+  }
+
+  .outfit-buttons {
+    margin-bottom: 12px;
+    display: block;
+  }
+  .outfit-buttons.hidden {
+    display: none;
+  }
+  .outfit-buttons button {
+    margin: 0 3px;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid #888;
+    background: #f8edd7;
+    cursor: pointer;
+  }  
 </style>
+
+<div id="menu-wrapper">
+  <button class="toggle-outfits" onclick="toggleOutfitButtons()">Toggle Outfits</button>
+  <div class="outfit-buttons" id="outfit-buttons">
+    <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
+    <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
+    <button onclick="if(player)setOutfitAndDraw(32)">Outfit 3</button>
+    <button onclick="if(player)setOutfitAndDraw(48)">Outfit 4</button>
+  </div>
+</div>
 
 <canvas></canvas>
 <script src="js/game.js"></script>
@@ -35,6 +77,19 @@
   gameState = "loading";
   startingHp = 3;
   numLevels = 6;
+
+  // helper to safely set outfit and redraw
+  function setOutfitAndDraw(offset) {
+    if (player && typeof player.setOutfit === "function") {
+      player.setOutfit(offset);
+      draw();
+    }
+  }
+
+  function toggleOutfitButtons() {
+    const div = document.getElementById('outfit-buttons');
+    div.classList.toggle('hidden');
+  }
 
   document.querySelector("html").onkeypress = function (e) {
     if (gameState == "title") {

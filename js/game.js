@@ -89,6 +89,8 @@ function startLevel(playerHp){
 
     player = new Player(randomPassableTile());
     player.hp = playerHp;
+    
+    randomPassableTile().replace(Exit);  
 }
 
 

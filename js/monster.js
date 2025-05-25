@@ -86,7 +86,7 @@ class Monster{
         }
         this.tile = tile;
         tile.monster = this;
-        tile.stepOn(this);
+                tile.stepOn(this);
     }
 
 }
@@ -113,6 +113,9 @@ class Player extends Monster{
     draw() {
         if(this.teleportCounter > 0){
             drawSprite(13, this.tile.x, this.tile.y);
+        }else if(this.dead){
+            // Draw dead sprite
+            drawSprite(4, this.tile.x, this.tile.y, this.outfit);
         }else{
             // Use outfit as y offset for drawSprite
             drawSprite(0, this.tile.x, this.tile.y, this.outfit);

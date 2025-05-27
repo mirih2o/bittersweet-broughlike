@@ -87,8 +87,11 @@ function startLevel(playerHp){
                          
     generateLevel();
 
+    // Preserve outfit if player exists, otherwise default to 0
+    let currentOutfit = (typeof player !== "undefined" && player && player.outfit !== undefined) ? player.outfit : 0;
     player = new Player(randomPassableTile());
     player.hp = playerHp;
+    player.outfit = currentOutfit;
     
     randomPassableTile().replace(Exit);  
 }

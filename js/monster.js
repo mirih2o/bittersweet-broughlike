@@ -127,12 +127,16 @@ class Player extends Monster{
 class Bird extends Monster{
     constructor(tile){
         super(tile, 7, 3);
+        this.name = "Tailor's Mannequin";
+        this.description = this.name + ": Basic enemy.";
     }
 }
 
 class Snake extends Monster{
     constructor(tile){
         super(tile, 8, 1);
+        this.name = "Gossip Wisp";
+        this.description = this.name + ": Moves twice if possible.";
     }
 
     doStuff(){
@@ -148,6 +152,8 @@ class Snake extends Monster{
 class Tank extends Monster{
     constructor(tile){
         super(tile, 9, 2);
+        this.name = "Cracked Mirror";
+        this.description = this.name + ": Slow, acts every other turn.";
     }
 
     update(){
@@ -162,6 +168,8 @@ class Tank extends Monster{
 class Eater extends Monster{
     constructor(tile){
         super(tile, 10, 1);
+        this.name = "Spider";
+        this.description = this.name + ": Consumes walls and grows.";
     }
 
     doStuff(){
@@ -178,6 +186,8 @@ class Eater extends Monster{
 class Jester extends Monster{
     constructor(tile){
         super(tile, 11, 2);
+        this.name = "Uniformed Group";
+        this.description = this.name + ":  Moves unpredictably.";
     }
 
     doStuff(){

@@ -15,7 +15,7 @@
 
   .menu-wrapper {
     text-align: center;
-    margin-bottom:10px;
+    margin-bottom: 10px;
   }
 
   .toggle-outfits {
@@ -43,11 +43,26 @@
     border: 1px solid #888;
     background: #f8edd7;
     cursor: pointer;
-  }  
+  }
+
+  #tooltip {
+    position: absolute;
+    display: none;
+    background: #222;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 13px;
+    pointer-events: none;
+    z-index: 10;
+    font-family: monospace;
+  }
 </style>
 
 <div id="menu-wrapper">
-  <button class="toggle-outfits" onclick="toggleOutfitButtons()">Toggle Outfits</button>
+  <button class="toggle-outfits" onclick="toggleOutfitButtons()">
+    Toggle Outfits
+  </button>
   <div class="outfit-buttons" id="outfit-buttons">
     <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
     <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
@@ -56,6 +71,7 @@
   </div>
 </div>
 
+<div id="tooltip"></div>
 <canvas></canvas>
 <script src="js/game.js"></script>
 <script src="js/map.js"></script>
@@ -87,8 +103,8 @@
   }
 
   function toggleOutfitButtons() {
-    const div = document.getElementById('outfit-buttons');
-    div.classList.toggle('hidden');
+    const div = document.getElementById("outfit-buttons");
+    div.classList.toggle("hidden");
   }
 
   document.querySelector("html").onkeypress = function (e) {
@@ -108,4 +124,37 @@
 
   setupCanvas();
 
+  // Tooltip logic for enemy hover
+  const tooltip = document.getElementById("tooltip");
+  const canvasRect = () => canvas.getBoundingClientRect();
+
+canvas.addEventListener("mousemove", function (e) {
+    const rect = canvasRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const tileX = Math.floor(mouseX / tileSize);
+    const tileY = Math.floor(mouseY / tileSize);
+
+    // Find monster at mouse position
+    let hovered = monsters.find(
+      (m) => m.tile.x === tileX && m.tile.y === tileY && !m.dead
+    );
+    // Only show tooltip if monster exists, has a description, and teleportCounter is 0 or less
+    if (
+      hovered &&
+      hovered.description &&
+      hovered.teleportCounter <= 0
+    ) {
+      tooltip.textContent = hovered.description;
+      tooltip.style.left = (e.clientX + 16) + "px";
+      tooltip.style.top = (e.clientY + 16) + "px";
+      tooltip.style.display = "block";
+    } else {
+      tooltip.style.display = "none";
+    }
+});
+
+  canvas.addEventListener("mouseleave", function () {
+    tooltip.style.display = "none";
+  });
 </script>

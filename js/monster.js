@@ -4,6 +4,8 @@ class Monster{
         this.sprite = sprite;
         this.hp = hp;
         this.teleportCounter = 2;
+        this.offsetX = 0;                                                   
+        this.offsetY = 0;
 	}
 
     heal(damage){
@@ -32,21 +34,32 @@ class Monster{
        }
     }
 
+    getDisplayX(){                     
+        return this.tile.x + this.offsetX;
+    }
+
+    getDisplayY(){                                                                  
+        return this.tile.y + this.offsetY;
+    }
+
 	draw(){
         if(this.teleportCounter > 0){
-            drawSprite(13, this.tile.x, this.tile.y);
+            drawSprite(13, this.getDisplayX(),  this.getDisplayY());                 
         }else{
-            drawSprite(this.sprite, this.tile.x, this.tile.y);
+            drawSprite(this.sprite, this.getDisplayX(),  this.getDisplayY());
             this.drawHp();
         }
+
+        this.offsetX -= Math.sign(this.offsetX)*(1/8);     
+        this.offsetY -= Math.sign(this.offsetY)*(1/8); 
 	}
     
     drawHp(){
         for(let i=0; i<this.hp; i++){
             drawSprite(
                 12,
-                this.tile.x + (i%3)*(3/16),
-                this.tile.y - Math.floor(i/3)*(3/16)
+                this.getDisplayX() + (i%3)*(3/16),
+                this.getDisplayY() - Math.floor(i/3)*(3/16)
             );
         }
     }	
@@ -61,6 +74,11 @@ class Monster{
                     this.attackedThisTurn = true;
                     newTile.monster.stunned = true;
                     newTile.monster.hit(1);
+
+                    shakeAmount = 5;
+
+                    this.offsetX = (newTile.x - this.tile.x)/2;         
+                    this.offsetY = (newTile.y - this.tile.y)/2;   
                 }
             }
             return true;
@@ -83,10 +101,12 @@ class Monster{
     move(tile){
         if(this.tile){
             this.tile.monster = null;
+            this.offsetX = this.tile.x - tile.x;    
+            this.offsetY = this.tile.y - tile.y;
         }
         this.tile = tile;
         tile.monster = this;
-                tile.stepOn(this);
+        tile.stepOn(this);
     }
 
 }
@@ -112,15 +132,18 @@ class Player extends Monster{
 
     draw() {
         if(this.teleportCounter > 0){
-            drawSprite(13, this.tile.x, this.tile.y);
+            drawSprite(13, this.getDisplayX(), this.getDisplayY());
         }else if(this.dead){
             // Draw dead sprite
             drawSprite(4, this.tile.x, this.tile.y, this.outfit);
         }else{
             // Use outfit as y offset for drawSprite
-            drawSprite(0, this.tile.x, this.tile.y, this.outfit);
+            drawSprite(0, this.getDisplayX(), this.getDisplayY(), this.outfit);
             this.drawHp();
         }
+
+        this.offsetX -= Math.sign(this.offsetX)*(1/8);     
+        this.offsetY -= Math.sign(this.offsetY)*(1/8); 
     }
 }
 

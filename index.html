@@ -94,6 +94,10 @@
   startingHp = 3;
   numLevels = 6;
 
+  shakeAmount = 0;       
+  shakeX = 0;                 
+  shakeY = 0; 
+
   // helper to safely set outfit and redraw
   function setOutfitAndDraw(offset) {
     if (player && typeof player.setOutfit === "function") {

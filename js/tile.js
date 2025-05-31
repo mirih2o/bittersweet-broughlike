@@ -61,6 +61,11 @@ class Floor extends Tile{
     };
 
     stepOn(monster){
+        if(monster.isPlayer){
+            // Play random footstep sound
+            const n = Math.floor(Math.random() * 4) + 1;
+            playSound("footstep" + n);
+        }
         if(monster.isPlayer && this.treasure){   
             score++;
             playSound("treasure");

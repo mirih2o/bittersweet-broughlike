@@ -190,6 +190,10 @@ function initSounds(){
         treasure: new Audio('sounds/treasure.wav'),
         newLevel: new Audio('sounds/newLevel.wav'),
         spell: new Audio('sounds/spell.wav'),
+        footstep1: new Audio('sounds/footstep1.wav'),
+        footstep2: new Audio('sounds/footstep2.wav'),
+        footstep3: new Audio('sounds/footstep3.wav'),
+        footstep4: new Audio('sounds/footstep4.wav'),
     };
 }
 

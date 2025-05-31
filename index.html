@@ -94,9 +94,9 @@
   startingHp = 3;
   numLevels = 6;
 
-  shakeAmount = 0;       
-  shakeX = 0;                 
-  shakeY = 0; 
+  shakeAmount = 0;
+  shakeX = 0;
+  shakeY = 0;
 
   // helper to safely set outfit and redraw
   function setOutfitAndDraw(offset) {
@@ -128,11 +128,13 @@
 
   setupCanvas();
 
+  initSounds();
+
   // Tooltip logic for enemy hover
   const tooltip = document.getElementById("tooltip");
   const canvasRect = () => canvas.getBoundingClientRect();
 
-canvas.addEventListener("mousemove", function (e) {
+  canvas.addEventListener("mousemove", function (e) {
     const rect = canvasRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
@@ -144,19 +146,15 @@ canvas.addEventListener("mousemove", function (e) {
       (m) => m.tile.x === tileX && m.tile.y === tileY && !m.dead
     );
     // Only show tooltip if monster exists, has a description, and teleportCounter is 0 or less
-    if (
-      hovered &&
-      hovered.description &&
-      hovered.teleportCounter <= 0
-    ) {
+    if (hovered && hovered.description && hovered.teleportCounter <= 0) {
       tooltip.textContent = hovered.description;
-      tooltip.style.left = (e.clientX + 16) + "px";
-      tooltip.style.top = (e.clientY + 16) + "px";
+      tooltip.style.left = e.clientX + 16 + "px";
+      tooltip.style.top = e.clientY + 16 + "px";
       tooltip.style.display = "block";
     } else {
       tooltip.style.display = "none";
     }
-});
+  });
 
   canvas.addEventListener("mouseleave", function () {
     tooltip.style.display = "none";

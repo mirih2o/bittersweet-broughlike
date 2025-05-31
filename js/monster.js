@@ -90,12 +90,18 @@ class Monster{
         if(this.hp <= 0){
             this.die();
         }
+
+        if(this.isPlayer){                                                     
+            playSound("hit1");                                              
+        }else{                                                       
+            playSound("hit2");                                              
+        } 
     }
 
     die(){
         this.dead = true;
         this.tile.monster = null;
-        this.sprite = 1;
+        this.sprite = 4;
     }
 
     move(tile){

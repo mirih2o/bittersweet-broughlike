@@ -206,9 +206,19 @@ function initSounds(){
         footstep3: new Audio('sounds/footstep3.wav'),
         footstep4: new Audio('sounds/footstep4.wav'),
     };
+    // Ensure all sounds respect the muted state on init
+    setAllSoundsMuted(muted);
+}
+
+function setAllSoundsMuted(mute) {
+    if (!sounds) return;
+    Object.values(sounds).forEach(audio => {
+        audio.muted = mute;
+    });
 }
 
 function playSound(soundName){                       
+    if (muted) return; // Prevent playing if muted
     sounds[soundName].currentTime = 0;  
     sounds[soundName].play();
 }

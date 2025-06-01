@@ -51,8 +51,20 @@ class Tile{
 
         if(this.treasure){                      
             drawSprite(15, this.x, this.y);                                             
-        } 
+        }
+
+        if(this.effectCounter){                    
+            this.effectCounter--;
+            ctx.globalAlpha = this.effectCounter/20;
+            drawSprite(this.effect, this.x, this.y);
+            ctx.globalAlpha = 1;
+        }
 	}
+
+    setEffect(effectSprite){                                  
+        this.effect = effectSprite;
+        this.effectCounter = 20;
+    }
 }
 
 class Floor extends Tile{
@@ -68,6 +80,10 @@ class Floor extends Tile{
         }
         if(monster.isPlayer && this.treasure){   
             score++;
+            if(score % 3 == 0 && numSpells < 9){                         
+                numSpells++;                
+                player.addSpell();            
+            }  
             playSound("treasure");
             this.treasure = false;
             spawnMonster();

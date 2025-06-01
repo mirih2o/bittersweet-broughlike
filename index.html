@@ -68,6 +68,7 @@
     <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
     <button onclick="if(player)setOutfitAndDraw(32)">Outfit 3</button>
     <button onclick="if(player)setOutfitAndDraw(48)">Outfit 4</button>
+    <button onclick="setMaxSpells9()">Max Spells</button>
   </div>
 </div>
 
@@ -111,6 +112,17 @@
     div.classList.toggle("hidden");
   }
 
+  function setMaxSpells9() {
+    numSpells = 9;
+    // Optionally, fill up the player's spells if needed
+    if (player && player.spells) {
+      while (player.spells.length < 9) {
+        player.addSpell();
+      }
+    }
+    draw();
+  }
+
   document.querySelector("html").onkeypress = function (e) {
     if (gameState == "title") {
       startGame();
@@ -121,6 +133,8 @@
       if (e.key == "s") player.tryMove(0, 1);
       if (e.key == "a") player.tryMove(-1, 0);
       if (e.key == "d") player.tryMove(1, 0);
+
+      if(e.key>=1 && e.key<=9) player.castSpell(e.key-1);
     }
   };
 

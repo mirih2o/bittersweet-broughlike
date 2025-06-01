@@ -18,7 +18,7 @@
     margin-bottom: 10px;
   }
 
-  .toggle-outfits {
+  .toggle-menu {
     margin-bottom: 12px;
     font-size: 13px;
     padding: 4px 10px;
@@ -28,14 +28,14 @@
     cursor: pointer;
   }
 
-  .outfit-buttons {
+  .menu-buttons {
     margin-bottom: 12px;
     display: block;
   }
-  .outfit-buttons.hidden {
+  .menu-buttons.hidden {
     display: none;
   }
-  .outfit-buttons button {
+  .menu-buttons button {
     margin: 0 3px;
     font-size: 12px;
     padding: 4px 10px;
@@ -60,10 +60,10 @@
 </style>
 
 <div id="menu-wrapper">
-  <button class="toggle-outfits" onclick="toggleOutfitButtons()">
-    Toggle Outfits
+  <button class="toggle-menu" onclick="toggleMenuButtons()">
+    <span id="menu-toggle-symbol">▼</span> Options
   </button>
-  <div class="outfit-buttons" id="outfit-buttons">
+  <div class="menu-buttons" id="menu-buttons">
     <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
     <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
     <button onclick="if(player)setOutfitAndDraw(32)">Outfit 3</button>
@@ -107,9 +107,11 @@
     }
   }
 
-  function toggleOutfitButtons() {
-    const div = document.getElementById("outfit-buttons");
+  function toggleMenuButtons() {
+    const div = document.getElementById("menu-buttons");
     div.classList.toggle("hidden");
+    const symbol = document.getElementById("menu-toggle-symbol");
+    symbol.textContent = div.classList.contains("hidden") ? "►" : "▼";
   }
 
   function setMaxSpells9() {

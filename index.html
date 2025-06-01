@@ -123,18 +123,32 @@
     draw();
   }
 
-  document.querySelector("html").onkeypress = function (e) {
+  document.querySelector("html").onkeydown = function (e) {
     if (gameState == "title") {
       startGame();
     } else if (gameState == "dead") {
       showTitle();
     } else if (gameState == "running") {
-      if (e.key == "w") player.tryMove(0, -1);
-      if (e.key == "s") player.tryMove(0, 1);
-      if (e.key == "a") player.tryMove(-1, 0);
-      if (e.key == "d") player.tryMove(1, 0);
-
-      if(e.key>=1 && e.key<=9) player.castSpell(e.key-1);
+      switch (e.key) {
+        case "w":
+        case "ArrowUp":
+          player.tryMove(0, -1);
+          break;
+        case "s":
+        case "ArrowDown":
+          player.tryMove(0, 1);
+          break;
+        case "a":
+        case "ArrowLeft":
+          player.tryMove(-1, 0);
+          break;
+        case "d":
+        case "ArrowRight":
+          player.tryMove(1, 0);
+          break;
+        default:
+          if (e.key >= 1 && e.key <= 9) player.castSpell(e.key - 1);
+      }
     }
   };
 

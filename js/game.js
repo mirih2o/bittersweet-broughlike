@@ -80,7 +80,8 @@ function showTitle(){
     ctx.fillRect(0,0,canvas.width, canvas.height);
 
     gameState = "title";
-
+    
+    drawSprite(0, 2, 4)
     drawText("Bittersweet", 50, true, canvas.height/2 - 110, "white");
     drawText("Broughlike", 50, true, canvas.height/2 - 50, "white"); 
 
@@ -116,16 +117,20 @@ function startLevel(playerHp, playerSpells){
 }
 
 
-function drawText(text, size, centered, textY, color){
-    ctx.fillStyle = color;
+function drawText(text, size, centered, textY, color, customX = null) {
     ctx.font = size + "px monospace";
+    let textWidth = ctx.measureText(text).width;
+    let textHeight = size * 1.2; // Approximate height
     let textX;
-    if(centered){
-        textX = (canvas.width-ctx.measureText(text).width)/2;
+    if (customX !== null) {
+        textX = customX - textWidth / 2;
+    } else if(centered){
+        textX = (canvas.width - textWidth) / 2;
     }else{
-        textX = canvas.width-uiWidth*tileSize+25;
+        textX = canvas.width - uiWidth * tileSize + 25;
     }
 
+    ctx.fillStyle = color;
     ctx.fillText(text, textX, textY);
 }
 
@@ -158,29 +163,56 @@ function addScore(score, won){
 function drawScores(){
     let scores = getScores();
     if(scores.length){
-        drawText(
-            rightPad(["RUN","SCORE","TOTAL"]),
-            18,
-            true,
-            canvas.height/2,
-            "white"
-        );
+        // Prepare header and rows as arrays of strings
+        const header = ["RUN", "SCORE", "TOTAL"];
+        const rows = scores.slice(0, 10).map(s => [s.run, s.score, s.totalScore]);
 
-        let newestScore = scores.pop();
-        scores.sort(function(a,b){
-            return b.totalScore - a.totalScore;
-        });
-        scores.unshift(newestScore);
+        // Calculate column widths
+        ctx.font = "18px monospace";
+        const allRows = [header, ...rows];
+        const colWidths = [0, 0, 0];
+        for (let row of allRows) {
+            for (let c = 0; c < 3; c++) {
+                const w = ctx.measureText(String(row[c])).width;
+                if (w > colWidths[c]) colWidths[c] = w;
+            }
+        }
 
-        for(let i=0;i<Math.min(10,scores.length);i++){
-            let scoreText = rightPad([scores[i].run, scores[i].score, scores[i].totalScore]);
+        // Calculate total table width and startX for horizontal centering
+        const colGap = 32;
+        const tableWidth = colWidths[0] + colWidths[1] + colWidths[2] + colGap * 2;
+        const startX = (canvas.width - tableWidth) / 2;
+        const startY = 340; // Fixed vertical position
+
+        // Draw header
+        let x = startX;
+        for (let c = 0; c < 3; c++) {
             drawText(
-                scoreText,
+                String(header[c]),
                 18,
-                true,
-                canvas.height/2 + 24+i*24,
-                i == 0 ? "#85C4D1" : "#DC99E1"
+                false,
+                startY,
+                "white",
+                x + (colWidths[c] / 2)
             );
+            x += colWidths[c] + colGap;
+        }
+
+        // Draw rows
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            let x = startX;
+            for (let c = 0; c < 3; c++) {
+                drawText(
+                    String(row[c]),
+                    18,
+                    false,
+                    startY + (i + 1) * 24,
+                    i == 0 ? "#85C4D1" : "#DC99E1",
+                    x + (colWidths[c] / 2)
+                );
+                x += colWidths[c] + colGap;
+            }
         }
     }
 }

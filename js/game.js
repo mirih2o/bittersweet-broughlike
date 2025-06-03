@@ -1,3 +1,5 @@
+let monsters = [];
+
 function setupCanvas(){
     canvas = document.querySelector("canvas");
     ctx = canvas.getContext("2d");
@@ -31,7 +33,7 @@ function draw(){
 
         for(let i=0;i<numTiles;i++){
             for(let j=0;j<numTiles;j++){
-                getTile(i,j).draw();
+                tiles[i][j].draw();
             }
         }
 
@@ -106,14 +108,13 @@ function startLevel(playerHp, playerSpells){
 
     // Preserve outfit if player exists, otherwise default to 0
     let currentOutfit = (typeof player !== "undefined" && player && player.outfit !== undefined) ? player.outfit : 0;
-    player = new Player(randomPassableTile());
+    player = new Player(randomPassableTile(true, true)); // avoid treasure and exit
     player.hp = playerHp;
     if(playerSpells){
         player.spells = playerSpells;
     } 
     player.outfit = currentOutfit;
-    
-    randomPassableTile().replace(Exit);  
+
 }
 
 

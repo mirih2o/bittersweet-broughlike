@@ -139,8 +139,11 @@ class Player extends Monster{
     } 
 
     tryMove(dx, dy){
-        if(super.tryMove(dx,dy)){
-            tick();
+        let newTile = this.tile.getNeighbor(dx, dy);
+        if (typeof newTile.isPassable === "function" ? newTile.isPassable() : newTile.passable) {
+            if(super.tryMove(dx,dy)){
+                tick();
+            }
         }
     }
 

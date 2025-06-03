@@ -30,7 +30,9 @@ class Tile{
     }
 
     getAdjacentPassableNeighbors(){
-        return this.getAdjacentNeighbors().filter(t => t.passable);
+        return this.getAdjacentNeighbors().filter(
+            t => typeof t.isPassable === "function" ? t.isPassable() : t.passable
+        );
     }
 
     getConnectedTiles(){
@@ -49,7 +51,8 @@ class Tile{
 	draw(){
         drawSprite(this.sprite, this.x, this.y);
 
-        if(this.treasure){                      
+        // Only draw treasure if not an exit
+        if(this.treasure && !this.exit){                      
             drawSprite(15, this.x, this.y);                                             
         }
 
@@ -68,9 +71,16 @@ class Tile{
 }
 
 class Floor extends Tile{
-    constructor(x,y){
-        super(x, y, 5, true);
+    constructor(x, y, sprite = 5, passable = true) {
+        super(x, y, sprite, passable);
     };
+
+    draw() {
+        drawSprite(this.sprite, this.x, this.y);
+        if (this.treasure) {
+            drawSprite(15, this.x, this.y);
+        }
+    }
 
     stepOn(monster){
         if(monster.isPlayer){
@@ -95,23 +105,38 @@ class Wall extends Tile{
     constructor(x, y){
         super(x, y, 6, false);
     }
+
+    draw() {
+        drawSprite(this.sprite, this.x, this.y);
+    }
 }
 
-class Exit extends Tile{
-    constructor(x, y){
-        super(x, y, 14, true);
+class Exit extends Floor {
+    constructor(x, y, dirToInside) {
+        super(x, y, 14, true); // passable
+        this.exit = true;
+        this.dirToInside = dirToInside;
     }
-
-    stepOn(monster){
-        if(monster.isPlayer){
+    isPassable() {
+        if (typeof gameState === "undefined" || gameState !== "running") return true;
+        if (!player || !player.tile) return true;
+        let px = player.tile.x, py = player.tile.y;
+        let passable = (px === this.x + this.dirToInside[0] && py === this.y + this.dirToInside[1]);
+        return passable;
+    }
+    stepOn(monster) {
+        if (monster.isPlayer) {
             playSound("newLevel");
-            if(level == numLevels){
+            if (level == numLevels) {
                 addScore(score, true);
                 showTitle();
-            }else{
+            } else {
                 level++;
-                startLevel(Math.min(maxHp, player.hp+1));
+                startLevel(Math.min(maxHp, player.hp + 1));
             }
         }
+    }
+    draw() {
+        drawSprite(this.sprite, this.x, this.y);
     }
 }

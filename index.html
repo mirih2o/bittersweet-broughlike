@@ -154,18 +154,22 @@
     } else if (gameState == "running") {
       switch (e.key) {
         case "w":
+        case "W":
         case "ArrowUp":
           player.tryMove(0, -1);
           break;
         case "s":
+        case "S":
         case "ArrowDown":
           player.tryMove(0, 1);
           break;
         case "a":
+        case "A":
         case "ArrowLeft":
           player.tryMove(-1, 0);
           break;
         case "d":
+        case "D":
         case "ArrowRight":
           player.tryMove(1, 0);
           break;

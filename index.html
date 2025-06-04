@@ -95,7 +95,7 @@
 <script>
   tileSize = 64;
   numTiles = 10;
-  uiWidth = 2;
+  uiWidth = 3;
   level = 1;
   maxHp = 6;
 
@@ -180,7 +180,7 @@
 
   initSounds();
 
-  // Tooltip logic for enemy hover
+  // Tooltip logic for enemy and spell hover
   const tooltip = document.getElementById("tooltip");
   const canvasRect = () => canvas.getBoundingClientRect();
 
@@ -201,9 +201,28 @@
       tooltip.style.left = e.clientX + 16 + "px";
       tooltip.style.top = e.clientY + 16 + "px";
       tooltip.style.display = "block";
-    } else {
-      tooltip.style.display = "none";
+      return;
     }
+
+    // Spell tooltip logic
+    if (window.spellsUI && window.spellDescriptions) {
+      let hoveredSpell = window.spellsUI.find(
+        s => mouseX >= s.x && mouseX <= s.x + s.width && mouseY >= s.y && mouseY <= s.y + s.height
+      );
+      if (hoveredSpell && hoveredSpell.spell) {
+          console.log("Hovered spell:", hoveredSpell.spell);
+          console.log("Description:", window.spellDescriptions[hoveredSpell.spell]);
+      }
+      if (hoveredSpell && hoveredSpell.spell && window.spellDescriptions[hoveredSpell.spell]) {
+        tooltip.textContent = window.spellDescriptions[hoveredSpell.spell];
+        tooltip.style.left = e.clientX + 16 + "px";
+        tooltip.style.top = e.clientY + 16 + "px";
+        tooltip.style.display = "block";
+        return;
+      }
+    }
+
+    tooltip.style.display = "none";
   });
 
   canvas.addEventListener("mouseleave", function () {

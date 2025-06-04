@@ -25,6 +25,8 @@ function drawSprite(sprite, x, y, row = 0){
     );
 }
 
+let spellsUI = [];
+
 function draw(){
     if(gameState == "running" || gameState == "dead"){  
         ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -46,10 +48,17 @@ function draw(){
         drawText("Level: "+level, 20, false, 30, "black");
         drawText("Score: "+score, 20, false, 60, "black");
 
+        spellsUI = [];
+
         for(let i=0; i<player.spells.length; i++){
-            let spellText = (i+1) + ") " + (player.spells[i] || "");                        
-            drawText(spellText, 20, false, 110+i*40, "#282828");        
+            let spellName = player.spells[i];
+            let spellText = (i+1) + ") " + (spellName || "");
+            let x = canvas.width - uiWidth * tileSize + 25, y = 110 + i*40;
+            drawText(spellText, 20, false, y, "#282828");
+            // Store bounding box for tooltip detection (adjust width as needed)
+            spellsUI.push({x: x, y: y-20, width: 200, height: 30, spell: spellName});
         }
+        window.spellsUI = spellsUI;
     }
 }
 

@@ -18,25 +18,26 @@
     margin-bottom: 10px;
   }
 
-  .toggle-menu {
+  .toggle-menu,
+  .mute-btn {
     margin-bottom: 12px;
-    font-size: 13px;
+    font-size: 16px;
+    height: 32px;
     padding: 4px 10px;
     border-radius: 4px;
     border: 1px solid #888;
     background: #f8edd7;
     cursor: pointer;
+    line-height: 1.2;
+    vertical-align: middle;
   }
 
   .mute-btn {
-    margin-left: 8px;
-    font-size: 13px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid #888;
-    background: #f8edd7;
-    cursor: pointer;
-    vertical-align: middle;
+    margin-left: 8px; /* keep if you want spacing between buttons */
+  }
+
+  button {
+    font-family: monospace;
   }
 
   .menu-buttons {
@@ -48,7 +49,7 @@
   }
   .menu-buttons button {
     margin: 0 3px;
-    font-size: 12px;
+    font-size: 16px;
     padding: 4px 10px;
     border-radius: 4px;
     border: 1px solid #888;
@@ -63,7 +64,7 @@
     color: #fff;
     padding: 4px 10px;
     border-radius: 4px;
-    font-size: 13px;
+    font-size: 16px;
     pointer-events: none;
     z-index: 10;
     font-family: monospace;

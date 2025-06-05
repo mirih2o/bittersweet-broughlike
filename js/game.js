@@ -45,6 +45,12 @@ function draw(){
 
         player.draw();
 
+        for(let i=0;i<numTiles;i++){
+            for(let j=0;j<numTiles;j++){
+                tiles[i][j].drawEffectIfPresent();
+            }
+        }
+
         drawText("Level: "+level, 20, false, 30, "black");
         drawText("Score: "+score, 20, false, 60, "black");
 

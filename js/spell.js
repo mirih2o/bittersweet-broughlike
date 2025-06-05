@@ -37,12 +37,16 @@ spells = {
         if (!player.lastMove) return;
         let newTile = player.tile;
         let collided = false;
+        let collisionTile = null;
+        let steps = 0;
         while(true){
             let testTile = newTile.getNeighbor(player.lastMove[0],player.lastMove[1]);
             if(testTile.passable && !testTile.monster){
                 newTile = testTile;
+                steps++;
             }else{
                 collided = true;
+                collisionTile = testTile;
                 break;
             }
         }
@@ -58,6 +62,12 @@ spells = {
                     t.monster.hit(2);
                 }
             });
+            if (collisionTile) {
+                // Delay is proportional to dash distance (steps)
+                setTimeout(() => {
+                    collisionTile.setEffect(17);
+                }, 100 * steps); // 100ms per tile
+            }
         }
     },
     UNVEIL: function(){

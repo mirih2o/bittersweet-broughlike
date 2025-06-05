@@ -56,13 +56,17 @@ class Tile{
             drawSprite(15, this.x, this.y);                                             
         }
 
-        if(this.effectCounter){                    
+        this.drawEffectIfPresent();
+	}
+
+    drawEffectIfPresent() {
+        if(this.effectCounter) {
             this.effectCounter--;
-            ctx.globalAlpha = this.effectCounter/20;
+            ctx.globalAlpha = this.effectCounter / 20;
             drawSprite(this.effect, this.x, this.y);
             ctx.globalAlpha = 1;
         }
-	}
+    }
 
     setEffect(effectSprite){                                  
         this.effect = effectSprite;

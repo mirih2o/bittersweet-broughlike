@@ -10,7 +10,8 @@
   body {
     background-color: rgb(145, 170, 204);
     text-align: center;
-    margin-top: 50px;
+    margin-top: 40px;
+    font-size: 16px;
   }
 
   .menu-wrapper {
@@ -57,6 +58,21 @@
     cursor: pointer;
   }
 
+  kbd {
+    display: inline-block;
+    margin: 0 1px;
+    font-size: 15px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    border: 1px solid #bbb;
+    background: #f5f5f5;
+    box-shadow: 0 1px 0 #ccc, 0 1px 2px #0001;
+    font-weight: bold;
+    white-space: nowrap;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
   #tooltip {
     position: absolute;
     display: none;
@@ -86,12 +102,34 @@
 </div>
 
 <div id="tooltip"></div>
-<canvas></canvas>
 
-<!-- Feedback Survey Section -->
-<div style="margin-top: 10px; text-align: center;">
-  <div style="display: flex; align-items: center; justify-content: center; gap: 16px;">
-    <div style="text-align: right; font-family: monospace; font-size: 18px  ;">
+<!-- Rules, Controls, and Feedback Section -->
+<div style="display: flex; justify-content: center; flex-direction: column, flex-start; gap: 40px; margin-top: 24px;">
+  <canvas></canvas>
+  <div>
+    <!-- How to Play Section -->
+    <div style="max-width: 340px; text-align: left; font-family: monospace; background: #f8edd7; border-radius: 8px; padding: 12px 16px; box-shadow: 0 2px 8px #0001;">
+      <h2 style="margin-top: 0; font-size: 18pxm;">How to Play</h2>
+      <ul style="padding-left: 18px; margin-top: 0;">
+        <li>Explore the dungeon, collect treasures, and reach the exit on each level.</li>
+        <li>Collect treasures for points and new spells. Every 3 points you get a spell.</li>
+        <li>Defeat monsters by bumping into them or using spells.</li>
+        <li>Each spell has a unique effect.</li>
+        <li>Monsters have unique movement     or abilities.</li>
+        <li>Hover over a monster or spell to see its description.</li>
+      </ul>
+      <h3 style="margin-bottom: 4px; margin-top: 18px; font-size: 16px;">Controls</h3>
+      <ul style="padding-left: 18px; margin-top: 0;"> 
+        <li><b>Move:</b> <kbd>W</kbd> <kbd>A</kbd> <kbd>S</kbd> <kbd>D</kbd> or Arrow Keys</li>
+        <li><b>Cast Spell:</b> <kbd>1</kbd>–<kbd>9</kbd></li>
+        <li><b>Change Outfit:</b> Use the Options menu</li>
+        <li><b>Mute Sound:</b> Use the Sound button</li>
+      </ul>
+    </div>
+    <!-- Feedback Survey Section -->
+<div style="margin-top: 12px; text-align: center;">
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <div style="text-align: center; font-family: monospace; font-size: 18px;">
       <strong>I’d appreciate your feedback!</strong><br>
       Please fill out this
       <a href="https://forms.gle/p41JubWG83BiRCV87" target="_blank" rel="noopener">feedback survey</a>.
@@ -99,8 +137,10 @@
     <img
       src="https://api.qrserver.com/v1/create-qr-code/?data=https://forms.gle/p41JubWG83BiRCV87&size=120x120"
       alt="QR code for feedback survey"
-      style="margin-top: 0;"
+      style="margin-top: 12px;"
     />
+  </div>
+</div>
   </div>
 </div>
 

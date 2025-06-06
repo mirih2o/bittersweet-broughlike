@@ -179,6 +179,12 @@ function addScore(score, won){
 function drawScores(){
     let scores = getScores();
     if(scores.length){
+        let newestScore = scores.pop();
+        scores.sort(function(a,b){
+            return b.totalScore - a.totalScore;
+        });
+        scores.unshift(newestScore);
+        
         // Prepare header and rows as arrays of strings
         const header = ["RUN", "SCORE", "TOTAL"];
         const rows = scores.slice(0, 10).map(s => [s.run, s.score, s.totalScore]);

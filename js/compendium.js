@@ -29,15 +29,19 @@ window.spellData = spellData;
 function showCompendium() {
   let html = "<h2>Monsters</h2><ul>";
   window.monsterData.forEach(monster => {
-    html += `<li>
-      <b>${monster.name}</b>: ${monster.description}
+    html += `<li class="compendium-monster">
+      <span class="compendium-image" style="background-position:-${monster.sprite * 16}px 0;"></span>
+      <b>${monster.name}</b>: ${monster.description}<br>
+      "Lore Text"
     </li>`;
   });
   html += "</ul>";
 
   html += "<h2>Spells</h2><ul>";
   Object.values(window.spellData).forEach(spell => {
-    html += `<li><b>${spell.name}</b>: ${spell.description}</li>`;
+    html += `<li class="compendium-spell">
+    <b>${spell.name}</b>: ${spell.description}
+    </li>`;
   });
   html += "</ul>";
 

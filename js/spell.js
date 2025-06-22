@@ -158,22 +158,3 @@ function boltTravel(direction, effect, damage){
         }
     }
 }
-
-const spellDescriptions = {
-    ESCAPE: "Teleport to a random passable tile.",
-    STOMP: "Stomp all monsters, dealing 2 damage for each wall around them.",
-    SWIRL: "Teleport all monsters to random passable tiles.",
-    DAYBREAK: "Start the level over, keeping your spells.",
-    AURA: "Heal yourself and adjacent monsters for 1 HP.",
-    DASH: "Dash in the direction of your last move, stunning and dealing 2 damage to enemies.",
-    UNVEIL: "Remove all walls, healing yourself for 2 HP.",
-    GIFT: "Heal all monsters for 1 HP and give them treasure.",
-    REFINE: "Turn adjacent walls into treasure.",
-    EMPOWER: "Gain +5 attack for the next turn.",
-    DUPLICATE: "Duplicate your spells, filling empty slots with the previous spell.",
-    BRAVERY: "Gain a shield that absorbs 2 damage and stun all monsters.",
-    FOCUS: "Shoot a bolt in the direction of your last move, dealing 2 damage.",
-    CROSS: "Shoot bolts in cardinal directions, dealing 2 damage each.",
-    X: "Shoot bolts diagonally in diagonal directions, dealing 3 damage each."
-};
-window.spellDescriptions = spellDescriptions;

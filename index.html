@@ -85,6 +85,22 @@
     z-index: 10;
     font-family: monospace;
   }
+
+  #compendiumModal {
+    display: none;
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 80%;
+    background: #222;
+    color: white;
+    overflow: auto;
+    padding: 10px;
+    z-index: 1000;
+    font-family: monospace;
+    font-size: 16px;
+  }
 </style>
 
 <div id="menu-wrapper">
@@ -92,6 +108,8 @@
     <span id="menu-toggle-symbol">▼</span> Options
   </button>
   <button class="mute-btn" id="mute-btn" onclick="toggleMute()">🔊 Sound</button>
+  <button class="mute-btn" id="openCompendium">Compendium</button>
+  
   <div class="menu-buttons" id="menu-buttons">
     <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
     <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
@@ -99,6 +117,10 @@
     <button onclick="if(player)setOutfitAndDraw(48)">Outfit 4</button>
     <button onclick="setMaxSpells9()">Max Spells</button>
   </div>
+<div id="compendiumModal">
+    <button onclick="document.getElementById('compendiumModal').style.display='none'">Close</button>
+    <div id="compendiumContent">compendium</div>
+</div>
 </div>
 
 <div id="tooltip"></div>
@@ -144,6 +166,7 @@
   </div>
 </div>
 
+<script src="js/compendium.js"></script>
 <script src="js/game.js"></script>
 <script src="js/map.js"></script>
 <script src="js/tile.js"></script>
@@ -151,6 +174,9 @@
 <script src="js/util.js"></script>
 <script src="js/spell.js"></script>
 <script>
+  const canvas = document.querySelector("canvas");
+  const ctx = canvas.getContext("2d");
+
   tileSize = 64;
   numTiles = 10;
   uiWidth = 3;
@@ -170,6 +196,7 @@
   shakeY = 0;
 
   muted = false;
+
 
   // helper to safely set outfit and redraw
   function setOutfitAndDraw(offset) {
@@ -203,7 +230,7 @@
       setAllSoundsMuted(muted);
   }
 
-  document.querySelector("html").onkeydown = function (e) {
+  window.onkeydown = function (e) {
     if (gameState == "title") {
       startGame();
     } else if (gameState == "dead") {
@@ -267,16 +294,16 @@
     }
 
     // Spell tooltip logic
-    if (window.spellsUI && window.spellDescriptions) {
+    if (window.spellsUI && window.spellData) {
       let hoveredSpell = window.spellsUI.find(
         s => mouseX >= s.x && mouseX <= s.x + s.width && mouseY >= s.y && mouseY <= s.y + s.height
       );
       if (hoveredSpell && hoveredSpell.spell) {
           console.log("Hovered spell:", hoveredSpell.spell);
-          console.log("Description:", window.spellDescriptions[hoveredSpell.spell]);
+          console.log("Description:", window.spellData[hoveredSpell.spell].description);
       }
-      if (hoveredSpell && hoveredSpell.spell && window.spellDescriptions[hoveredSpell.spell]) {
-        tooltip.textContent = window.spellDescriptions[hoveredSpell.spell];
+      if (hoveredSpell && hoveredSpell.spell && window.spellData[hoveredSpell.spell]) {
+        tooltip.textContent = window.spellData[hoveredSpell.spell].description;
         tooltip.style.left = e.clientX + 16 + "px";
         tooltip.style.top = e.clientY + 16 + "px";
         tooltip.style.display = "block";

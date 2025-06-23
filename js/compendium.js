@@ -26,29 +26,49 @@ const spellData = {
 };
 window.spellData = spellData;
 
+function toggleCompendium() {
+  const modal = document.getElementById("compendiumModal");
+  const symbol = document.getElementById("compendium-toggle-symbol");
+  if (modal.classList.contains("visible")) {
+    modal.classList.remove("visible");  
+    if (symbol) symbol.textContent = "▼";
+  } else {
+    showCompendium();
+    modal.classList.add("visible");
+    if (symbol) symbol.textContent = "►";
+  }
+}
+
 function showCompendium() {
-  let html = "<h2>Monsters</h2><ul>";
+  let html = `<h2>Monsters</h2><ul class="compendium-list">`;
   window.monsterData.forEach(monster => {
-    html += `<li class="compendium-monster">
-      <span class="compendium-image" style="background-position:-${monster.sprite * 16}px 0;"></span>
-      <b>${monster.name}</b>: ${monster.description}<br>
-      "Lore Text"
-    </li>`;
+    html += `
+      <li class="compendium-card">
+        <div class="compendium-monster-name">${monster.name}</div>
+        <div class="compendium-monster-row">
+          <span class="compendium-image" style="background-position:-${monster.sprite * 16}px 0;"></span>
+          <div class="compendium-monster-texts">
+            <div class="compendium-monster-desc">${monster.description}</div>
+            <div class="compendium-monster-lore">"Lore Text"</div>
+          </div>
+        </div>
+      </li>
+    `;
   });
   html += "</ul>";
 
-  html += "<h2>Spells</h2><ul>";
+  html += "<h2>Spells</h2><ul class=\"compendium-list\">";
   Object.values(window.spellData).forEach(spell => {
     html += `<li class="compendium-spell">
-    <b>${spell.name}</b>: ${spell.description}
+      <b>${spell.name}</b>: ${spell.description}
     </li>`;
   });
   html += "</ul>";
 
   document.getElementById("compendiumContent").innerHTML = html;
-  document.getElementById("compendiumModal").style.display = "block";
 }
 
-if (document.getElementById("openCompendium")) {
-  document.getElementById("openCompendium").onclick = showCompendium;
+const compendiumBtn = document.getElementById("openCompendium");
+if (compendiumBtn) {
+  compendiumBtn.onclick = toggleCompendium;
 }

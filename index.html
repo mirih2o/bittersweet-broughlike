@@ -93,46 +93,118 @@
     left: 10%;
     width: 80%;
     height: 80%;
-    background: #222;
-    color: white;
+    background: #f8edd7;
+    color: #3a2d1a;
     overflow: auto;
     padding: 10px;
     z-index: 1000;
     font-family: monospace;
     font-size: 16px;
+    border: 3px #bca77b;
+    border-radius: 8px;
+    background-image: linear-gradient(
+      90deg,
+      #f3e6c6 0 2%,
+      #f8edd7 20% 80%,
+      #f3e6c6 98% 100%
+    );
+  }
+  #compendiumModal.visible {
+    display: block;
+  }
+
+  .compendium-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
   }
 
   .compendium-monster {
-    display: inline-block;
-    margin-bottom: 18px;;
+    margin-bottom: 12px;
   }
 
-  .compendium-spell {
-    display: inline-block;
+  .compendium-monster-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    margin-left: 54px; /* aligns with desc/lore under image */
+    color: #7b5c2b;
+  }
+
+  .compendium-monster-row {
+    display: flex;
+    align-items: flex-start;
   }
 
   .compendium-image {
-        display:inline-block;
-        width:16px;
-        height:16px;
-        background-image:url('spritesheet.png');
-        background-size: 384px 64px;
-        background-repeat: no-repeat;
-        image-rendering: pixelated;
-        vertical-align: middle;
-        margin-right: 18px;
-        transform: scale(3);
-        transform-origin: top left;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("spritesheet.png");
+    background-size: 384px 64px;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    transform: scale(3);
+    transform-origin: top left;
+    flex-shrink: 0;
+  }
+
+  .compendium-monster-texts {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    margin-left: 48px;
+  }
+
+  .compendium-monster-desc {
+    font-size: 15px;
+    color: #5a4320;
+    margin-top: 8px;
+  }
+
+  .compendium-monster-lore {
+    color: #a08a5c;
+    font-size: 14px;
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .compendium-card {
+    background: #fffbe9;
+    border-radius: 12px;
+    padding: 16px 18px 12px 18px;
+    margin-bottom: 0;
+    max-width: 320px;
+    min-width: 220px;
+    border: 1.5px solid #e7d7b7;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 2px 8px #bca77b44;
+    align-items: stretch;
+  }
+
+  .compendium-spell {
+    margin-bottom: 8px;
   }
 </style>
 
 <div id="menu-wrapper">
   <button class="toggle-menu" onclick="toggleMenuButtons()">
-    <span id="menu-toggle-symbol">▼</span> Options
+    <span id="menu-toggle-symbol">►</span> Options
   </button>
-  <button class="mute-btn" id="mute-btn" onclick="toggleMute()">🔊 Sound</button>
-  <button class="mute-btn" id="openCompendium">Compendium</button>
-  
+  <button class="mute-btn" id="mute-btn" onclick="toggleMute()">
+    🔊 Sound
+  </button>
+  <button class="mute-btn" id="openCompendium">
+    <span id="compendium-toggle-symbol">▼</span> Compendium
+  </button>
+
   <div class="menu-buttons" id="menu-buttons">
     <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
     <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
@@ -140,10 +212,9 @@
     <button onclick="if(player)setOutfitAndDraw(48)">Outfit 4</button>
     <button onclick="setMaxSpells9()">Max Spells</button>
   </div>
-<div id="compendiumModal">
-    <button onclick="document.getElementById('compendiumModal').style.display='none'">Close</button>
+  <div id="compendiumModal">
     <div id="compendiumContent">compendium</div>
-</div>
+  </div>
 </div>
 
 <div id="tooltip"></div>
@@ -233,7 +304,7 @@
     const div = document.getElementById("menu-buttons");
     div.classList.toggle("hidden");
     const symbol = document.getElementById("menu-toggle-symbol");
-    symbol.textContent = div.classList.contains("hidden") ? "►" : "▼";
+    symbol.textContent = div.classList.contains("hidden") ? "▼" : "►";
   }
 
   function setMaxSpells9() {
@@ -340,4 +411,6 @@
   canvas.addEventListener("mouseleave", function () {
     tooltip.style.display = "none";
   });
+
+  document.getElementById("openCompendium").onclick = toggleCompendium;
 </script>

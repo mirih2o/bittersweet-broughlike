@@ -2,7 +2,7 @@ const monsterData = [
     { name: "Tailor's Mannequin", description: "Basic enemy.", sprite: 7 },
     { name: "Gossip Wisp", description: "Moves twice if possible.", sprite: 8 },
     { name: "Cracked Mirror", description: "Slow, acts every other turn.", sprite: 9 },
-    { name: "Spider", description: "Consumes walls and grows.", sprite: 10 },
+    { name: "Old Polaroid", description: "Jumps over walls to reach targets.", sprite: 10 },
     { name: "Uniformed Group", description: "Moves unpredictably.", sprite: 11 }
 ];
 window.monsterData = monsterData;

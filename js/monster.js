@@ -238,18 +238,103 @@ class Tank extends Monster{
 class Eater extends Monster{
     constructor(tile){
         super(tile, 10, 1);
-        this.name = "Spider";
-        this.description = this.name + ": Consumes walls and grows.";
+        this.name = "Old Polaroid";
+        this.description = this.name + ": Jumps over walls to reach targets.";
     }
 
     doStuff(){
-        let neighbors = this.tile.getAdjacentNeighbors().filter(t => !t.passable && inBounds(t.x,t.y));
-        if(neighbors.length){
-            neighbors[0].replace(Floor);
-            this.heal(0.5);
-        }else{
-            super.doStuff();
+        let possibleMoves = this.getAllPossibleMoves();
+        
+        if(possibleMoves.length){
+            let bestMove = this.chooseBestMove(possibleMoves);
+            this.executeMove(bestMove);
         }
+    }
+    
+    getAllPossibleMoves(){
+        let possibleMoves = [];
+        
+        // Add normal movement options
+        possibleMoves.push(...this.getNormalMoves());
+        
+        // Add jump movement options
+        possibleMoves.push(...this.getJumpMoves());
+        
+        return possibleMoves;
+    }
+    
+    getNormalMoves(){
+        let moves = [];
+        let neighbors = this.tile.getAdjacentPassableNeighbors();
+        neighbors = neighbors.filter(t => !t.monster || t.monster.isPlayer);
+        
+        for(let neighbor of neighbors){
+            moves.push({
+                tile: neighbor,
+                dx: neighbor.x - this.tile.x,
+                dy: neighbor.y - this.tile.y,
+                isJump: false
+            });
+        }
+        
+        return moves;
+    }
+    
+    getJumpMoves(){
+        let moves = [];
+        let allNeighbors = this.tile.getAdjacentNeighbors();
+        
+        for(let neighbor of allNeighbors){
+            if(this.isWall(neighbor)){
+                let jumpTile = this.getJumpDestination(neighbor);
+                if(jumpTile && this.canJumpTo(jumpTile)){
+                    moves.push({
+                        tile: jumpTile,
+                        dx: jumpTile.x - this.tile.x,
+                        dy: jumpTile.y - this.tile.y,
+                        isJump: true
+                    });
+                }
+            }
+        }
+        
+        return moves;
+    }
+    
+    isWall(tile){
+        return !tile.passable && inBounds(tile.x, tile.y);
+    }
+    
+    getJumpDestination(wallTile){
+        let jumpX = wallTile.x + (wallTile.x - this.tile.x);
+        let jumpY = wallTile.y + (wallTile.y - this.tile.y);
+        
+        if(inBounds(jumpX, jumpY)){
+            return getTile(jumpX, jumpY);
+        }
+        return null;
+    }
+    
+    canJumpTo(tile){
+        return tile.passable && !tile.monster;
+    }
+    
+    chooseBestMove(possibleMoves){
+        possibleMoves.sort((a,b) => a.tile.dist(player.tile) - b.tile.dist(player.tile));
+        return possibleMoves[0];
+    }
+    
+    executeMove(move){
+        if(move.isJump){
+            this.jumpMove(move.tile);
+        }else{
+            this.tryMove(move.dx, move.dy);
+        }
+    }
+    
+    jumpMove(targetTile){
+        this.lastMove = [targetTile.x - this.tile.x, targetTile.y - this.tile.y];
+        this.move(targetTile);
     }
 }
 

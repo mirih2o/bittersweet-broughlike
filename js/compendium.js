@@ -59,9 +59,13 @@ function showCompendium() {
 
   html += "<h2>Spells</h2><ul class=\"compendium-list\">";
   Object.values(window.spellData).forEach(spell => {
-    html += `<li class="compendium-spell">
-      <b>${spell.name}</b>: ${spell.description}
-    </li>`;
+    html += `
+    <li class="compendium-card compendium-spell-card">
+      <div class="compendium-spell-name">${spell.name}</div>
+      <div class="compendium-spell-desc">${spell.description}</div>
+      <div class="compendium-spell-lore">"Lore Text"</div>
+    </li>
+  `;
   });
   html += "</ul>";
 

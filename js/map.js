@@ -96,17 +96,80 @@ function placeExitOnOuterWall() {
         // Right column (x=numTiles-1), faces left
         if (tiles[numTiles - 1][y] instanceof Wall) candidates.push({x: numTiles - 1, y: y, dir: [-1, 0]});
     }
+    
     if (candidates.length === 0) return;
-    let pos = candidates[Math.floor(Math.random() * candidates.length)];
+    
+    // Get the connected tiles from a random passable tile (represents the main area)
+    let connectedTiles = randomPassableTile().getConnectedTiles();
+    
+    // Filter candidates to only those that would be reachable
+    let reachableCandidates = candidates.filter(pos => {
+        let insideX = pos.x + pos.dir[0];
+        let insideY = pos.y + pos.dir[1];
+        let insideTile = getTile(insideX, insideY);
+        
+        // Check if the inside tile is already connected, or if making it a floor would connect it
+        return connectedTiles.some(tile => tile.x === insideX && tile.y === insideY) ||
+               insideTile.getAdjacentPassableNeighbors().some(neighbor => 
+                   connectedTiles.includes(neighbor)
+               );
+    });
+    
+    // If no reachable candidates, use any candidate and ensure connectivity
+    if (reachableCandidates.length === 0) {
+        reachableCandidates = candidates;
+    }
+    
+    let pos = reachableCandidates[Math.floor(Math.random() * reachableCandidates.length)];
    
     // Place the Exit tile with direction
     tiles[pos.x][pos.y] = new Exit(pos.x, pos.y, pos.dir);
     console.log("Placing exit at", pos.x, pos.y, "dir", pos.dir, "instanceof Exit:", tiles[pos.x][pos.y] instanceof Exit);
     
-    // Ensure the inside-adjacent tile is a Floor
+    // Ensure the inside-adjacent tile is a Floor and connected
     let insideX = pos.x + pos.dir[0];
     let insideY = pos.y + pos.dir[1];
-    if (tiles[insideX] && tiles[insideX][insideY] && !(tiles[insideX][insideY] instanceof Floor)) {
-        tiles[insideX][insideY] = new Floor(insideX, insideY);
+    if (tiles[insideX] && tiles[insideX][insideY]) {
+        if (!(tiles[insideX][insideY] instanceof Floor)) {
+            tiles[insideX][insideY] = new Floor(insideX, insideY);
+        }
+        
+        // Ensure this floor tile is connected to the main area
+        let insideTile = tiles[insideX][insideY];
+        if (!connectedTiles.includes(insideTile)) {
+            // Create a path to connect it
+            ensurePathToMainArea(insideTile, connectedTiles);
+        }
+    }
+}
+
+function ensurePathToMainArea(targetTile, connectedTiles) {
+    // Find the nearest connected tile and create a path
+    let queue = [targetTile];
+    let visited = new Set([`${targetTile.x},${targetTile.y}`]);
+    
+    while (queue.length > 0) {
+        let current = queue.shift();
+        
+        // Check if any neighbor is already connected
+        for (let neighbor of current.getAdjacentNeighbors()) {
+            if (connectedTiles.includes(neighbor)) {
+                // Found connection, we're done
+                return;
+            }
+            
+            let key = `${neighbor.x},${neighbor.y}`;
+            if (!visited.has(key) && inBounds(neighbor.x, neighbor.y)) {
+                visited.add(key);
+                
+                // Convert walls to floors to create path
+                if (neighbor instanceof Wall) {
+                    tiles[neighbor.x][neighbor.y] = new Floor(neighbor.x, neighbor.y);
+                    neighbor = tiles[neighbor.x][neighbor.y];
+                }
+                
+                queue.push(neighbor);
+            }
+        }
     }
 }

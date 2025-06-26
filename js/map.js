@@ -20,15 +20,17 @@ function generateTiles(){
     for(let i=0;i<numTiles;i++){
         tiles[i] = [];
         for(let j=0;j<numTiles;j++){
-            // 30% chance of wall, otherwise floor
-            // and ensure that the edges are walls
+            // Ensure that the edges are ALWAYS walls
             if(i === 0 || j === 0 || i === numTiles-1 || j === numTiles-1){
                 tiles[i][j] = new Wall(i,j);
-            }else if(Math.random() < 0.3){
-                tiles[i][j] = new Wall(i,j);
             }else{
-                tiles[i][j] = new Floor(i,j);
-                passableTiles++;
+                // 30% chance of wall for interior tiles, otherwise floor
+                if(Math.random() < 0.3){
+                    tiles[i][j] = new Wall(i,j);
+                }else{
+                    tiles[i][j] = new Floor(i,j);
+                    passableTiles++;
+                }
             }
         }
     }
@@ -62,8 +64,38 @@ function randomPassableTile(avoidTreasure = false, avoidExit = false){
 }
 
 function generateTreasures(){
-    for(let i=0;i<3;i++){                                         
-        randomPassableTile().treasure = true;                            
+    let treasuresPlaced = 0;
+    let maxAttempts = 1000; // Safety limit
+    let attempts = 0;
+    
+    while(treasuresPlaced < 3 && attempts < maxAttempts){
+        attempts++;
+        let tile = randomPassableTile();
+        
+        // Check if this tile already has a treasure
+        if(!tile.treasure){
+            tile.treasure = true;
+            treasuresPlaced++;
+        }
+    }
+    
+    // If we still don't have 3 treasures, force place them
+    if(treasuresPlaced < 3){
+        let passableTiles = [];
+        for(let i = 0; i < numTiles; i++){
+            for(let j = 0; j < numTiles; j++){
+                let tile = getTile(i, j);
+                if(tile.passable && !tile.treasure){
+                    passableTiles.push(tile);
+                }
+            }
+        }
+        
+        // Shuffle and place remaining treasures
+        passableTiles = shuffle(passableTiles);
+        for(let i = treasuresPlaced; i < 3 && i < passableTiles.length; i++){
+            passableTiles[i].treasure = true;
+        }
     }
 }
 
@@ -162,13 +194,16 @@ function ensurePathToMainArea(targetTile, connectedTiles) {
             if (!visited.has(key) && inBounds(neighbor.x, neighbor.y)) {
                 visited.add(key);
                 
-                // Convert walls to floors to create path
-                if (neighbor instanceof Wall) {
+                // Convert walls to floors to create path, BUT NOT EDGE WALLS
+                if (neighbor instanceof Wall && 
+                    neighbor.x > 0 && neighbor.x < numTiles-1 && 
+                    neighbor.y > 0 && neighbor.y < numTiles-1) {
                     tiles[neighbor.x][neighbor.y] = new Floor(neighbor.x, neighbor.y);
                     neighbor = tiles[neighbor.x][neighbor.y];
+                    queue.push(neighbor);
+                } else if (neighbor.passable) {
+                    queue.push(neighbor);
                 }
-                
-                queue.push(neighbor);
             }
         }
     }

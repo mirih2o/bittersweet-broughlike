@@ -26,6 +26,15 @@ const spellData = {
 };
 window.spellData = spellData;
 
+const diaryData = `I keep thinking that if I dress the way I feel inside, the rest might follow. That the shape of my outside could teach my heart not to flinch.
+But the moment I step out, the stares, the silence, the second-guessing, it all comes back. Like I’m wearing something forbidden. Like I’m asking too much, even when I barely speak.
+It’s strange how a ribbon can feel like a rebellion. Or how styling my hair feels like taking back a little piece of myself.
+Some days, I wonder what they see when they look at me. Other days, I try not to care.
+Today, I went out anyway. That counts for something.
+Tomorrow, maybe I’ll walk a little taller.
+`;
+window.diaryData = diaryData;
+
 function toggleCompendium() {
   const modal = document.getElementById("compendiumModal");
   const symbol = document.getElementById("compendium-toggle-symbol");
@@ -40,7 +49,14 @@ function toggleCompendium() {
 }
 
 function showCompendium() {
-  let html = `<h2>Monsters</h2><ul class="compendium-list">`;
+  html = "<h2>Diary</h2><div class=\"compendium-card compendium-diary-card\">";
+  html += `<div class="compendium-diary-title">Dear Diary</div>`;
+  html += `<div class="compendium-diary-content">${window.diaryData.split('\n').map(paragraph => 
+  paragraph.trim() ? `<p>${paragraph}</p>` : ''
+).join('')}</div>`;
+html += "</div>";
+
+  html += `<h2>Monsters</h2><ul class="compendium-list">`;
   window.monsterData.forEach(monster => {
     html += `
       <li class="compendium-card">

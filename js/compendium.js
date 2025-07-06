@@ -16,7 +16,7 @@ const spellData = {
     DASH: { name: "Dash", description: "Dash in the direction of your last move, stunning and dealing 2 damage to enemies.", lore: "Moving forward with confidence leaving the doubters stunned." },
     UNVEIL: { name: "Unveil", description: "Remove all walls, healing yourself for 2 HP.", lore: "Coming out shatters barriers and reveals your strength." },
     GIFT: { name: "Gift", description: "Heal all monsters for 1 HP and give them treasure.", lore: "Offer understanding to those who fear your transformation." },
-    REFINE: { name: "Refine", description: "Turn adjacent walls into treasure.", lore: "Gender euphoria transforms confinement into beautiful adornment." },
+    LIBERATE: { name: "Liberate", description: "Destroy adjacent walls.", lore: "Break free from the labels they try to impose on you." },
     EMPOWER: { name: "Empower", description: "Gain +5 attack for the next turn.", lore: "Embracing your truth grants a power that others cannot comprehend." },
     DUPLICATE: { name: "Duplicate", description: "Duplicate your spells, filling empty slots with the previous spell.", lore: "The girl in the mirror isn't a reflection—she's finally you." },
     BRAVERY: { name: "Bravery", description: "Gain a shield that absorbs 2 damage and stun all monsters.", lore: "The courage to be your authentic self creates an armor nothing can pierce." },

@@ -89,10 +89,10 @@ spells = {
             monsters[i].tile.treasure = true;
         }
     },
-    REFINE: function(){
+    LIBERATE: function(){
         player.tile.getAdjacentNeighbors().forEach(function(t){
             if(!t.passable && inBounds(t.x, t.y)){
-                t.replace(Floor).treasure = true;
+                t.replace(Floor);
             }
         });
     },

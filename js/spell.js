@@ -21,7 +21,15 @@ spells = {
         }
     },
     DAYBREAK: function(){
-        startLevel(1, player.spells);
+        // Remove all monsters except player
+        for(let i = monsters.length - 1; i >= 0; i--){
+            if(!monsters[i].isPlayer){
+                monsters[i].tile.monster = null;
+                monsters.splice(i, 1);
+            }
+        }
+        // Spawn the default number of monsters
+        generateMonsters();  
     },
     AURA: function(){
         player.tile.getAdjacentNeighbors().forEach(function(t){

@@ -16,8 +16,13 @@ class Monster{
 
     update(){
         this.teleportCounter--;
-        if(this.stunned || this.teleportCounter > 0){
-            this.stunned = false;
+
+        if(this.stunned > 0){
+            this.stunned--;
+            return;
+        }
+            
+        if(this.teleportCounter > 0){
             return;
         }
 

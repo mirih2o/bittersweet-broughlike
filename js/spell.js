@@ -66,7 +66,7 @@ spells = {
             newTile.getAdjacentNeighbors().forEach(t => {
                 if(t.monster){
                     t.setEffect(17);
-                    t.monster.stunned = true;
+                    t.monster.stunned = Math.max(t.monster.stunned || 0, 1);
                     t.monster.hit(2);
                 }
             });
@@ -92,9 +92,11 @@ spells = {
     },
     GIFT: function(){
         for(let i=0;i<monsters.length;i++){
-            monsters[i].tile.setEffect(16);
-            monsters[i].heal(1);
-            monsters[i].tile.treasure = true;
+            if(!monsters[i].isPlayer){
+                monsters[i].tile.setEffect(16); // Use the healing visual effect
+                monsters[i].heal(1);
+                monsters[i].stunned = Math.max(monsters[i].stunned || 0, 3); // Stun for 3 turns
+            }
         }
     },
     LIBERATE: function(){
@@ -117,7 +119,7 @@ spells = {
     BRAVERY: function(){
         player.shield = 2;
         for(let i=0;i<monsters.length;i++){
-            monsters[i].stunned = true;
+            monsters[i].stunned = Math.max(monsters[i].stunned || 0, 1);
         }
     },
 

@@ -12,7 +12,7 @@ const spellData = {
     STOMP: { name: "Stomp", description: "Stomp all monsters, dealing 2 damage for each wall around them.", lore: "Turn society's barriers into weapons against oppression." },
     SWIRL: { name: "Swirl", description: "Teleport all monsters to random passable tiles.", lore: "A spin in your favorite dress scatters those who refuse understanding." },
     DAYBREAK: { name: "Daybreak", description: "Start the level over, keeping your spells.", lore: "Each morning brings another chance to be authentically you." },
-    AURA: { name: "Aura", description: "Heal yourself and adjacent monsters for 1 HP.", lore: "Your pride radiates healing even to those who misgendered you." },
+    AURA: { name: "Aura", description: "Heal yourself for 2 HP and adjacent monsters for 1 HP.", lore: "Your pride radiates healing even to those who misgendered you." },
     DASH: { name: "Dash", description: "Dash in the direction of your last move, stunning and dealing 2 damage to enemies.", lore: "Moving forward with confidence leaving the doubters stunned." },
     UNVEIL: { name: "Unveil", description: "Remove all walls, healing yourself for 2 HP.", lore: "Coming out shatters barriers and reveals your strength." },
     GIFT: { name: "Gift", description: "Heal all monsters for 1 HP and stun them for 3 turns.", lore: "Offer understanding to those who fear your transformation." },

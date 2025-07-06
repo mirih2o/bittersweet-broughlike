@@ -39,7 +39,7 @@ spells = {
             }
         });
         player.tile.setEffect(22);
-        player.heal(1);
+        player.heal(2);
     },
     DASH: function(){
         if (!player.lastMove) return;

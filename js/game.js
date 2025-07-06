@@ -155,21 +155,10 @@ function getScores(){
     }
 }
 
-function addScore(score, won){
+function addScore(score){
     let scores = getScores();
-    let scoreObject = {score: score, run: 1, totalScore: score, active: won};
-    let lastScore = scores.pop();
-
-    if(lastScore){
-        if(lastScore.active){
-            scoreObject.run = lastScore.run+1;
-            scoreObject.totalScore += lastScore.totalScore;
-        }else{
-            scores.push(lastScore);
-        }
-    }
+    let scoreObject = { level: level, score: score };
     scores.push(scoreObject);
-
     localStorage["scores"] = JSON.stringify(scores);
 }
 
@@ -177,35 +166,38 @@ function drawScores(){
     let scores = getScores();
     if(scores.length){
         let newestScore = scores.pop();
-        scores.sort(function(a,b){
-            return b.totalScore - a.totalScore;
+        scores.sort(function(a, b) {
+            if (b.score !== a.score) {
+                return b.score - a.score; // sort by score descending
+            }
+            return b.level - a.level; // if scores are equal, sort by level descending
         });
         scores.unshift(newestScore);
         
         // Prepare header and rows as arrays of strings
-        const header = ["RUN", "SCORE", "TOTAL"];
-        const rows = scores.slice(0, 10).map(s => [s.run, s.score, s.totalScore]);
+        const header = ["LEVEL", "SCORE"];
+        const rows = scores.slice(0, 10).map(s => [s.level, s.score]);
 
-        // Calculate column widths
+        // Calculate column widths for 2 columns
         ctx.font = "18px monospace";
         const allRows = [header, ...rows];
-        const colWidths = [0, 0, 0];
+        const colWidths = [0, 0];
         for (let row of allRows) {
-            for (let c = 0; c < 3; c++) {
+            for (let c = 0; c < 2; c++) {
                 const w = ctx.measureText(String(row[c])).width;
                 if (w > colWidths[c]) colWidths[c] = w;
             }
         }
 
-        // Calculate total table width and startX for horizontal centering
+        // Calculate total table width and startX for horizontal centering (2 columns)
         const colGap = 32;
-        const tableWidth = colWidths[0] + colWidths[1] + colWidths[2] + colGap * 2;
+        const tableWidth = colWidths[0] + colWidths[1] + colGap;
         const startX = (canvas.width - tableWidth) / 2;
         const startY = 340; // Fixed vertical position
 
         // Draw header
         let x = startX;
-        for (let c = 0; c < 3; c++) {
+        for (let c = 0; c < 2; c++) {
             drawText(
                 String(header[c]),
                 18,
@@ -221,7 +213,7 @@ function drawScores(){
         for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
             let x = startX;
-            for (let c = 0; c < 3; c++) {
+            for (let c = 0; c < 2; c++) {
                 drawText(
                     String(row[c]),
                     18,

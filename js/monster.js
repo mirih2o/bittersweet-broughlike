@@ -8,6 +8,7 @@ class Monster{
         this.offsetY = 0;
         this.lastMove = [-1,0];
         this.bonusAttack = 0;
+        this.stunned = 0;
 	}
 
     heal(damage){
@@ -16,7 +17,7 @@ class Monster{
 
     update(){
         this.teleportCounter--;
-
+        
         if(this.stunned > 0){
             this.stunned--;
             return;
@@ -55,6 +56,10 @@ class Monster{
         }else{
             drawSprite(this.sprite, this.getDisplayX(),  this.getDisplayY());
             this.drawHp();
+        }
+
+        if(this.stunned > 0){
+            drawSprite(24, this.getDisplayX(), this.getDisplayY());
         }
 
         this.offsetX -= Math.sign(this.offsetX)*(1/8);     

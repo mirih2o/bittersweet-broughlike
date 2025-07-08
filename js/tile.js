@@ -132,8 +132,14 @@ class Exit extends Floor {
         if (monster.isPlayer) {
             playSound("newLevel");
             if (level == numLevels) {
+                // Special celebration for completing the last level (20)
                 addScore(score, true);
-                showTitle();
+                showTemporaryMessage("You've completed the journey! Your true self shines brightly.");
+                
+                // Optional: add a slight delay before showing the title screen
+                setTimeout(() => {
+                    showTitle();
+                }, 3000); // 3-second delay to show the message
             } else {
                 level++;
                 startLevel(Math.min(maxHp, player.hp + 1));

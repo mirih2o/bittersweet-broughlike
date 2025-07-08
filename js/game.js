@@ -127,6 +127,31 @@ function startLevel(playerHp, playerSpells){
     } 
     player.outfit = currentOutfit;
 
+    // Add narrative messages based on level
+    // These represent the emotional journey of identity acceptance
+    if (level === 1) {
+        showTemporaryMessage("The shadows feel like old friends... it's safer to hide..");
+    } else if (level === 2) {
+        showTemporaryMessage("They never said it aloud, but you heard it anyway.");
+    } else if (level === 4) {
+        showTemporaryMessage("Something within you stirs, asking to be seen.");
+    } else if (level === 6) {
+        showTemporaryMessage("Not blending in isn’t failure. It’s clarity.");
+    } else if (level === 8) {
+        showTemporaryMessage("The stares don’t shrink you like they used to.");
+    } else if (level === 10) {
+        showTemporaryMessage("For the first time, your stride feels confident.");
+    } else if (level === 12) {
+        showTemporaryMessage("Their rules no longer feel like your boundaries.");
+    } else if (level === 14) {
+        showTemporaryMessage("You are not the echo of what they wanted.");
+    } else if (level === 16) {
+        showTemporaryMessage("You no longer wait for permission to exist.");
+    } else if (level === 18) {
+        showTemporaryMessage("This isn’t becoming something new. It’s returning to yourself.");
+    } else if (level === 20) {
+        showTemporaryMessage("There is power in becoming. You are beautiful.");
+    }
 }
 
 
@@ -264,4 +289,26 @@ function playSound(soundName){
     if (muted) return; // Prevent playing if muted
     sounds[soundName].currentTime = 0;  
     sounds[soundName].play();
+}
+
+// Add this function to show temporary messages
+function showTemporaryMessage(text) {
+    // Create a message element
+    let messageElement = document.createElement("div");
+    messageElement.className = "temporary-message";
+    messageElement.textContent = text;
+    
+    // Position it below the canvas
+    const canvasRect = canvas.getBoundingClientRect();
+    messageElement.style.top = `${canvasRect.bottom + 16}px`; // 16px below canvas bottom
+    messageElement.style.left = `${canvasRect.left + canvasRect.width/2}px`; // centered
+    
+    // Add to document
+    document.body.appendChild(messageElement);
+    
+    // Fade out and remove after a delay
+    setTimeout(() => {
+        messageElement.classList.add("fade-out");
+        setTimeout(() => messageElement.remove(), 1000);
+    }, 3000);
 }

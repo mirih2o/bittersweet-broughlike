@@ -47,36 +47,64 @@ spells = {
         let collided = false;
         let collisionTile = null;
         let steps = 0;
-        while(true){
-            let testTile = newTile.getNeighbor(player.lastMove[0],player.lastMove[1]);
-            if(testTile.passable && !testTile.monster){
-                newTile = testTile;
-                steps++;
-            }else{
-                collided = true;
-                collisionTile = testTile;
-                break;
+        
+        // Try to move in the direction
+        let testTile = newTile.getNeighbor(player.lastMove[0], player.lastMove[1]);
+        
+        // Check if we hit something immediately
+        if(!testTile.passable || testTile.monster) {
+            // We hit something right away
+            collided = true;
+            collisionTile = testTile;
+        } else {
+            // We can move at least one tile, try to go further
+            while(true){
+                testTile = newTile.getNeighbor(player.lastMove[0], player.lastMove[1]);
+                if(testTile.passable && !testTile.monster){
+                    newTile = testTile;
+                    steps++;
+                } else {
+                    collided = true;
+                    collisionTile = testTile;
+                    break;
+                }
             }
         }
+        
+        // Apply movement and effects
+        if(collided) {
+            // Always apply dash effects when colliding, even if we didn't move
+            if(collisionTile.monster) {
+                // Hit the monster we collided with
+                collisionTile.setEffect(17);
+                collisionTile.monster.stunned = Math.max(collisionTile.monster.stunned || 0, 1);
+                collisionTile.monster.hit(2);
+            } else {
+                // Hit the wall - apply effect
+                // Delay is proportional to dash distance (steps)
+                setTimeout(() => {
+                    collisionTile.setEffect(17);
+                }, 100 * Math.max(1, steps)); // 100ms per tile, at least 100ms delay
+            }
+        }
+        
+        // Move the player if we actually went somewhere
         if(player.tile != newTile){
             player.offsetX = player.tile.x - newTile.x;
             player.offsetY = player.tile.y - newTile.y;
             player.move(newTile);
             player.dashCollided = collided;
-            newTile.getAdjacentNeighbors().forEach(t => {
-                if(t.monster){
-                    t.setEffect(17);
-                    t.monster.stunned = Math.max(t.monster.stunned || 0, 1);
-                    t.monster.hit(2);
-                }
-            });
-            if (collisionTile) {
-                // Delay is proportional to dash distance (steps)
-                setTimeout(() => {
-                    collisionTile.setEffect(17);
-                }, 100 * steps); // 100ms per tile
-            }
         }
+        
+        // Always attack adjacent monsters at the final position
+        let finalTile = player.tile; // Use player's final position
+        finalTile.getAdjacentNeighbors().forEach(t => {
+            if(t.monster){
+                t.setEffect(17);
+                t.monster.stunned = Math.max(t.monster.stunned || 0, 1);
+                t.monster.hit(2);
+            }
+        });
     },
     UNVEIL: function(){
         for(let i=1;i<numTiles-1;i++){

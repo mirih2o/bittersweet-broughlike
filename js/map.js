@@ -108,7 +108,27 @@ function generateMonsters(){
 }
 
 function spawnMonster(){
-    let monsterType = shuffle([Bird, Snake, Tank, Eater, Jester])[0];
+    // Count current number of Jesters
+    let jesterCount = 0;
+    for(let i=0; i<monsters.length; i++){
+        if(monsters[i] instanceof Jester){
+            jesterCount++;
+        }
+    }
+    
+    // Calculate maximum allowed Jesters for this level
+    const maxJesters = Math.floor(level/5) + 1;
+    
+    // Prepare available monster types
+    let availableMonsters = [Bird, Snake, Tank, Eater];
+    
+    // Only include Jester if we haven't reached the maximum
+    if(jesterCount < maxJesters){
+        availableMonsters.push(Jester);
+    }
+    
+    // Select a random monster type from available options
+    let monsterType = shuffle(availableMonsters)[0];
     let monster = new monsterType(randomPassableTile(true)); // avoid treasure
     monsters.push(monster);
 }

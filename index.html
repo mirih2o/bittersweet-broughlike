@@ -301,11 +301,11 @@
     <span id="compendium-toggle-symbol">▼</span> Compendium
   </button>
 
-  <div class="menu-buttons" id="menu-buttons">
+   <div class="menu-buttons" id="menu-buttons">
     <button onclick="if(player)setOutfitAndDraw(0)">Outfit 1</button>
-    <button onclick="if(player)setOutfitAndDraw(16)">Outfit 2</button>
-    <button onclick="if(player)setOutfitAndDraw(32)">Outfit 3</button>
-    <button onclick="if(player)setOutfitAndDraw(48)">Outfit 4</button>
+    <button id="outfit2Btn" onclick="trySetOutfit(16)" disabled>Outfit 2</button>
+    <button id="outfit3Btn" onclick="trySetOutfit(32)" disabled>Outfit 3</button>
+    <button id="outfit4Btn" onclick="trySetOutfit(48)" disabled>Outfit 4</button>
     <button onclick="setMaxSpells9()">Max Spells</button>
   </div>
   <div id="compendiumModal">
@@ -396,6 +396,30 @@
     }
   }
 
+  // Function to check if an outfit is unlocked and set it
+  function trySetOutfit(offset) {
+    const unlockedOutfits = localStorage["unlockedOutfits"] ? 
+      JSON.parse(localStorage["unlockedOutfits"]) : [0];
+      
+    if (unlockedOutfits.includes(offset)) {
+      setOutfitAndDraw(offset);
+    } else {
+      // Optional: Show a message that this outfit is still locked
+      let levelNeeded = offset === 16 ? 5 : (offset === 32 ? 9 : 13);
+      showTemporaryMessage(`This outfit unlocks at level ${levelNeeded}`);
+    }
+  }
+
+  // Function to update outfit button states based on unlocked outfits
+  function updateOutfitButtons() {
+    const unlockedOutfits = localStorage["unlockedOutfits"] ? 
+      JSON.parse(localStorage["unlockedOutfits"]) : [0];
+      
+    document.getElementById("outfit2Btn").disabled = !unlockedOutfits.includes(16);
+    document.getElementById("outfit3Btn").disabled = !unlockedOutfits.includes(32);
+    document.getElementById("outfit4Btn").disabled = !unlockedOutfits.includes(48);
+  }
+
   function toggleMenuButtons() {
     const div = document.getElementById("menu-buttons");
     div.classList.toggle("hidden");
@@ -458,6 +482,8 @@
   setupCanvas();
 
   initSounds();
+
+  updateOutfitButtons();
 
   // Tooltip logic for enemy and spell hover
   const tooltip = document.getElementById("tooltip");

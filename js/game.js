@@ -108,6 +108,7 @@ function startGame(){
     numSpells = 1;
 
     startLevel(startingHp);
+    updateOutfitButtons();
 
     gameState = "running";
 }
@@ -126,6 +127,9 @@ function startLevel(playerHp, playerSpells){
         player.spells = playerSpells;
     } 
     player.outfit = currentOutfit;
+
+    // Check for outfit unlocks at this level
+    checkUnlockOutfits();
 
     // Add narrative messages based on level
     // These represent the emotional journey of identity acceptance
@@ -311,4 +315,33 @@ function showTemporaryMessage(text) {
         messageElement.classList.add("fade-out");
         setTimeout(() => messageElement.remove(), 1000);
     }, 3000);
+}
+
+function checkUnlockOutfits() {
+  let unlockedOutfits = localStorage["unlockedOutfits"] ? 
+    JSON.parse(localStorage["unlockedOutfits"]) : [0];
+
+  let unlocked = false;
+  if (level >= 5 && !unlockedOutfits.includes(16)) {
+    unlockedOutfits.push(16);
+    showTemporaryMessage("New outfit unlocked! A step toward your true self.");
+    unlocked = true;
+  }
+  if (level >= 9 && !unlockedOutfits.includes(32)) {
+    unlockedOutfits.push(32);
+    showTemporaryMessage("New outfit unlocked! You feel more confident now.");
+    unlocked = true;
+  }
+  if (level >= 13 && !unlockedOutfits.includes(48)) {
+    unlockedOutfits.push(48);
+    showTemporaryMessage("Final outfit unlocked! Your authentic self emerges.");
+    unlocked = true;
+  }
+
+  if (unlocked) {
+    localStorage["unlockedOutfits"] = JSON.stringify(unlockedOutfits);
+    updateOutfitButtons();
+  }
+
+  return unlockedOutfits;
 }
